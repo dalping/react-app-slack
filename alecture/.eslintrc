@@ -1,4 +1,0 @@
-{
-  "extends": ["plugin:prettier/recommended"]
-  //eslint가 추천하는대로 따름
-}
