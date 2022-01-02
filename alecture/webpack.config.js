@@ -36,7 +36,7 @@ module.exports = {
   devServer: {
     historyApiFallback: true, // react router
     port: 3000,
-    publicPath: "/dist/",
+    //publicPath: "/dist/",
     proxy: {
       "/api/": {
         target: "http://localhost:3000",
@@ -45,15 +45,3 @@ module.exports = {
     },
   },
 };
-
-if (isDevelopment && config.plugins) {
-  config.plugins.push(new webpack.HotModuleReplacementPlugin());
-  config.plugins.push(new ReactRefreshWebpackPlugin());
-  config.plugins.push(
-    new BundleAnalyzerPlugin({ analyzerMode: "server", openAnalyzer: true })
-  );
-}
-if (!isDevelopment && config.plugins) {
-  config.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
-  config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: "static" }));
-}
