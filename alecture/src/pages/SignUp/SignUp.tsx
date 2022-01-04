@@ -2,37 +2,43 @@ import React, { useState, useCallback, useEffect } from "react";
 import * as Styled from "./style";
 
 function SignUp() {
-  const [Info, setInfo] = useState({
+  const [info, setInfo] = useState({
     email: "",
     nickname: "",
     password: "",
     confirmPassword: "",
   });
-  const { email, nickname, password, confirmPassword } = Info;
+  const [checkPassword, setCheckPassword] = useState(true);
 
-  useEffect(() => {
-    console.log(Info);
-  }, [Info]);
+  const { email, nickname, password, confirmPassword } = info;
+
+  // useEffect(() => {
+  //   console.log(info);
+  // }, [info]);
 
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      //이메일, 닉네임, 패스워드, 패스워드 체크, 패스워드 일치여부 확인
-      if (nickname.length === 0) {
+
+      if (!email || !nickname || !password) {
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        setCheckPassword(false);
+        return;
       }
     },
-    [Info]
+    [info]
   );
 
   const onChange = useCallback(
     (e) => {
       const { value, name } = e.target;
-      setInfo({ ...Info, [name]: value });
+      setInfo({ ...info, [name]: value });
     },
-    [Info]
+    [info]
   );
-
-  const confirmHandeler = () => {};
 
   return (
     <Styled.SignUpContainer>
@@ -59,8 +65,10 @@ function SignUp() {
           ></input>
         </label>
         <div className="confirmMsg">
-          <span>비밀번호가 일치하지 않습니다.</span>
-          <span>닉네임을 입력해주세요.</span>
+          {!nickname && <span>닉네임을 입력해주세요.</span>}
+          {!password && <span>패스워드를 입력해주세요.</span>}
+          {!email && <span>이메일을 입력해주세요.</span>}
+          {checkPassword ? null : <span>비밀번호가 일치하지 않습니다.</span>}
         </div>
         <button>회원가입</button>
         <div>
