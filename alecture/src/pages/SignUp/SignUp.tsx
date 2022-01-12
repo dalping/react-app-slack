@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
+import useInput from "../../hooks/useInput";
 import * as Styled from "./style";
 
 function SignUp() {
@@ -8,13 +9,10 @@ function SignUp() {
     password: "",
     confirmPassword: "",
   });
+
   const [checkPassword, setCheckPassword] = useState(true);
 
   const { email, nickname, password, confirmPassword } = info;
-
-  // useEffect(() => {
-  //   console.log(info);
-  // }, [info]);
 
   const onSubmit = useCallback(
     (e) => {
