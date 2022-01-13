@@ -1,6 +1,8 @@
+import axios from "axios";
 import React, { useState, useCallback, useEffect } from "react";
 import useInput from "../../hooks/useInput";
 import * as Styled from "./style";
+import { Link } from "react-router-dom";
 
 function SignUp() {
   const [info, setInfo] = useState({
@@ -26,6 +28,15 @@ function SignUp() {
         setCheckPassword(false);
         return;
       }
+
+      axios
+        .post("http://localhost:3095/api/users", {
+          email,
+          nickname,
+          password,
+        })
+        .then(() => {})
+        .catch(() => {});
     },
     [info]
   );
@@ -71,7 +82,9 @@ function SignUp() {
         <button>회원가입</button>
         <div>
           <span>이미 회원이신가요?</span>
-          <span className="goLogin">로그인 하러가기</span>
+          <Link to="/login">
+            <span className="goLogin">로그인 하러가기</span>
+          </Link>
         </div>
       </form>
     </Styled.SignUpContainer>
