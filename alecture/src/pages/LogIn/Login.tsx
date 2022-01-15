@@ -6,9 +6,13 @@ import useSWR from "swr";
 import fecther from "../../utils/fetcher";
 
 function Login() {
-  const { data, error } = useSWR("http://localhost:3095/api/users", fecther, {
-    dedupingInterval: 100000,
-  });
+  const { data, error, revalidate } = useSWR(
+    "http://localhost:3095/api/users",
+    fecther,
+    {
+      dedupingInterval: 100000,
+    }
+  );
 
   const [info, setInfo] = useState({
     email: "",
@@ -32,6 +36,7 @@ function Login() {
           }
         )
         .then(() => {
+          revalidate();
           console.log("로그인 성공");
         })
         .catch(() => {
