@@ -1,11 +1,13 @@
 import axios from "axios";
 
-const fecther = (url: string) => {
-  axios
+const fetcher = async (url: string) =>
+  await axios
     .get(url, {
       withCredentials: true,
     })
-    .then((response) => response.data);
-};
+    .then((res) => {
+      console.log(res);
+      return "안녕";
+    });
 
-export default fecther;
+export default fetcher;

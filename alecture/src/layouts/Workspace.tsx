@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useCallback, useState, FC } from "react";
+import { Navigate } from "react-router-dom";
 import useSWR from "swr";
 import fecther from "../utils/fetcher";
 
-function Workspace() {
+const Workspace: FC = ({ children }) => {
   const { data, error, revalidate } = useSWR(
     "http://localhost:3095/api/users",
     fecther,
@@ -22,12 +23,16 @@ function Workspace() {
       });
   }, []);
 
+  if (!data) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <div>
-      <button>헐랭</button>
       <button>로그아웃</button>
+      {children}
     </div>
   );
-}
+};
 
 export default Workspace;

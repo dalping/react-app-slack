@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import * as Styled from "./style";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import useSWR from "swr";
 import fecther from "../../utils/fetcher";
@@ -8,12 +8,10 @@ import fecther from "../../utils/fetcher";
 function Login() {
   const { data, error, revalidate } = useSWR(
     "http://localhost:3095/api/users",
-    fecther,
-    {
-      dedupingInterval: 100000,
-    }
+    fecther
   );
 
+  const [logInError, setLogInError] = useState(false);
   const [info, setInfo] = useState({
     email: "",
     password: "",
@@ -37,14 +35,16 @@ function Login() {
         )
         .then(() => {
           revalidate();
-          console.log("로그인 성공");
         })
         .catch(() => {
+          setLogInError(error.response?.data?.statusCode === 401);
           console.log("로그인 실패");
         });
     },
     [info]
   );
+
+  console.log(data);
 
   const onChange = useCallback(
     (e) => {
@@ -53,6 +53,12 @@ function Login() {
     },
     [info]
   );
+
+  if (data) {
+    //로그인이 되어있는 경우
+    return <Navigate to="/workspace/channel" />;
+  }
+
   return (
     <Styled.LoginContainer>
       <form className="signup" onSubmit={onSubmit}>
