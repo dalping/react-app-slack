@@ -6,7 +6,7 @@ import useSWR from "swr";
 import fecther from "../../utils/fetcher";
 
 function Login() {
-  const { data, error, revalidate } = useSWR(
+  const { data, error, revalidate, mutate } = useSWR(
     "http://localhost:3095/api/users",
     fecther
   );
@@ -33,8 +33,9 @@ function Login() {
             withCredentials: true,
           }
         )
-        .then(() => {
-          revalidate();
+        .then((res) => {
+          //revalidate();
+          mutate(res.data, false);
         })
         .catch(() => {
           setLogInError(error.response?.data?.statusCode === 401);
@@ -43,8 +44,6 @@ function Login() {
     },
     [info]
   );
-
-  console.log(data);
 
   const onChange = useCallback(
     (e) => {
@@ -55,7 +54,7 @@ function Login() {
   );
 
   if (data) {
-    //로그인이 되어있는 경우
+    //로그인 되어있는 경우
     return <Navigate to="/workspace/channel" />;
   }
 

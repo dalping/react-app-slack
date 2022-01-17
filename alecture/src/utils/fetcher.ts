@@ -5,9 +5,6 @@ const fetcher = async (url: string) =>
     .get(url, {
       withCredentials: true,
     })
-    .then((res) => {
-      console.log(res);
-      return "안녕";
-    });
+    .then((res) => res.data);
 
 export default fetcher;

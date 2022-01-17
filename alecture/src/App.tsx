@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Workspace from "./layouts/Workspace";
 import Channel from "./pages/Channel/Channel";
 import Login from "./pages/LogIn/Login";
 import SignUp from "./pages/SignUp/SignUp";

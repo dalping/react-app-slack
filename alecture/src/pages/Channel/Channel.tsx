@@ -1,5 +1,5 @@
 import React from "react";
-import Workspace from "../../layouts/Workspace";
+import Workspace from "../../layouts/Workspace/Workspace";
 import * as Styled from "./style";
 
 function Channel() {
