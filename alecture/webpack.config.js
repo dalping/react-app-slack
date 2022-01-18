@@ -1,5 +1,5 @@
 const prod = process.env.NODE_ENV === "production";
-
+const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
@@ -7,7 +7,8 @@ module.exports = {
   mode: prod ? "production" : "development",
   entry: "./src/index.tsx",
   output: {
-    path: __dirname + "/dist/",
+    path: path.join(__dirname + "/dist/"),
+    filename: "app.js",
   },
   module: {
     rules: [
@@ -34,9 +35,11 @@ module.exports = {
   ],
 
   devServer: {
-    historyApiFallback: true, // react router
     port: 3000,
-    //publicPath: "/dist/",
+    historyApiFallback: true, // react router
+    devMiddleware: { publicPath: "/dist" },
+    static: { directory: path.resolve(__dirname, "public") },
+    hot: true,
     proxy: {
       "/api/": {
         target: "http://localhost:3000",
