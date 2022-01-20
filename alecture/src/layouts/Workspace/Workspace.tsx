@@ -53,7 +53,15 @@ const Workspace: FC = ({ children }) => {
               src={gravatar.url(data.email, { s: "28px", d: "retro" })}
               alt={data.nickname}
             />
-            {showUserMenu && <Menu>프로필 메뉴</Menu>}
+            {showUserMenu && (
+              <Menu
+                style={{ right: 0 }}
+                show={showUserMenu}
+                onCloseModal={onClickUserProfile}
+              >
+                프로필 메뉴
+              </Menu>
+            )}
           </span>
         </Styled.RightMenu>
       </Styled.Header>
