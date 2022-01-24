@@ -33,4 +33,8 @@ const Menu: FC<Props> = ({
   );
 };
 
+Menu.defaultProps = {
+  closeButton: true,
+};
+
 export default Menu;

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import * as Styled from "./style";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import useSWR from "swr";
 import fecther from "../../utils/fetcher";
@@ -55,7 +55,7 @@ function Login() {
 
   if (data) {
     //로그인 되어있는 경우
-    return <Navigate to="/workspace/channel" />;
+    return <Redirect to="/workspace/channel" />;
   }
 
   return (
