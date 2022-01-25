@@ -9,9 +9,20 @@ import DirectMessage from "../../pages/DirectMessage/DirectMessage";
 import Channel from "../../pages/Channel/Channel";
 import Menu from "../../components/Menu/Menu";
 import { IUser } from "../../typings/db";
+import Modal from "../../components/Modal/Modal";
+import { Input, Button, Label } from "./style";
 
 const Workspace: FC = ({ children }) => {
+  const [newWorkspaceInput, setNewWorkspaceInput] = useState({
+    name: "",
+    url: "",
+  });
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
+    useState(false);
+
+  const { name, url } = newWorkspaceInput;
+
   const { data, error, revalidate, mutate } = useSWR<IUser | false>(
     "http://localhost:3095/api/users",
     fecther,
@@ -40,7 +51,25 @@ const Workspace: FC = ({ children }) => {
     setShowUserMenu(!showUserMenu);
   }, [showUserMenu]);
 
-  const onClickCreateWorkspace = useCallback(() => {}, []);
+  const onCreateWorkspace = useCallback((e) => {
+    e.preventDefault();
+  }, []);
+
+  const onClickCreateWorkspace = useCallback(() => {
+    setShowCreateWorkspaceModal(!showCreateWorkspaceModal);
+  }, [showCreateWorkspaceModal]);
+
+  const onChange = useCallback(
+    (e) => {
+      const { value, name } = e.target;
+      setNewWorkspaceInput({ ...newWorkspaceInput, [name]: value });
+    },
+    [newWorkspaceInput]
+  );
+
+  const onCloseModal = useCallback(() => {
+    setShowCreateWorkspaceModal(!showCreateWorkspaceModal);
+  }, [showCreateWorkspaceModal]);
 
   //로그인 되어있지 않은 경우
   if (!data) {
@@ -77,10 +106,10 @@ const Workspace: FC = ({ children }) => {
           </span>
         </Styled.RightMenu>
       </Styled.Header>
-      <button onClick={onLogout}>로그아웃</button>
+
       <Styled.WorkspaceWrapper>
         <Styled.Workspaces>
-          {data?.Workspaces.map((ws) => {
+          {data.Workspaces.map((ws) => {
             return (
               <Link key={ws.id} to={`/workspace/${123}/channel/일반`}>
                 <Styled.WorkspaceButton>
@@ -104,6 +133,31 @@ const Workspace: FC = ({ children }) => {
           </Switch>
         </Styled.Chats>
       </Styled.WorkspaceWrapper>
+      <Modal show={showCreateWorkspaceModal} onCloseModal={onCloseModal}>
+        <form onSubmit={onCreateWorkspace}>
+          <Label id="workspace-label">
+            <span>워크스페이스 이름</span>
+            <Input
+              id="workspace"
+              value={newWorkspaceInput.name}
+              onChange={onChange}
+            >
+              워크스페이스 이름
+            </Input>
+          </Label>
+          <Label id="workspace-label">
+            <span>워크스페이스 이름</span>
+            <Input
+              id="workspace"
+              value={newWorkspaceInput.url}
+              onChange={onChange}
+            >
+              워크스페이스 이름
+            </Input>
+          </Label>
+          <Button type="submit">생성하기</Button>
+        </form>
+      </Modal>
     </div>
   );
 };
