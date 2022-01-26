@@ -18,7 +18,7 @@ const Modal: FC<Props> = ({ show, children, onCloseModal }) => {
   return (
     <CreateModal onClick={onCloseModal}>
       <div onClick={stopPropagation}>
-        <CloseModalButton onClick={onCloseModal}>&items;</CloseModalButton>
+        <CloseModalButton onClick={onCloseModal}></CloseModalButton>
         {children}
       </div>
     </CreateModal>
