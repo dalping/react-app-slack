@@ -55,7 +55,7 @@ function Login() {
 
   if (data) {
     //로그인 되어있는 경우
-    return <Redirect to="/workspace/channel" />;
+    return <Redirect to="/workspace/sleact/channel/일반" />;
   }
 
   return (

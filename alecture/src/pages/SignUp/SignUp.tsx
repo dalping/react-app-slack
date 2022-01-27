@@ -2,9 +2,16 @@ import axios from "axios";
 import React, { useState, useCallback, useEffect } from "react";
 import useInput from "../../hooks/useInput";
 import * as Styled from "./style";
-import { Link } from "react-router-dom";
+import useSWR from "swr";
+import { Link, Redirect } from "react-router-dom";
+import fetcher from "../../utils/fetcher";
 
 function SignUp() {
+  const { data, error, revalidate, mutate } = useSWR(
+    "http://localhost:3095/api/users",
+    fetcher
+  );
+
   const [info, setInfo] = useState({
     email: "",
     nickname: "",
@@ -48,6 +55,11 @@ function SignUp() {
     },
     [info]
   );
+
+  if (data) {
+    //로그인 되어있는 경우
+    return <Redirect to="/workspace/sleact/channel/일반" />;
+  }
 
   return (
     <Styled.SignUpContainer>

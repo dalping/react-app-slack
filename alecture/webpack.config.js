@@ -7,8 +7,9 @@ module.exports = {
   mode: prod ? "production" : "development",
   entry: "./src/index.tsx",
   output: {
-    path: path.join(__dirname + "/dist/"),
+    path: path.join(__dirname, "dist"),
     filename: "app.js",
+    publicPath: "/dist/",
   },
   module: {
     rules: [
@@ -35,15 +36,16 @@ module.exports = {
   ],
 
   devServer: {
-    port: 3000,
-    historyApiFallback: true, // react router
-    devMiddleware: { publicPath: "/dist" },
-    static: { directory: path.resolve(__dirname, "public") },
+    historyApiFallback: true,
+    port: 3090,
     hot: true,
+    devMiddleware: { publicPath: "/dist/" },
+    static: { directory: path.resolve(__dirname) },
     proxy: {
       "/api/": {
-        target: "http://localhost:3000",
+        target: "http://localhost:3095",
         changeOrigin: true,
+        ws: true,
       },
     },
   },

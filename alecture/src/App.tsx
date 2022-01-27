@@ -13,8 +13,9 @@ function App() {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={SignUp} />
         <Route path="/channel" component={Channel} />
-        <Route path="/workspace" component={Workspace} />
-        <Route path="/*" component={SignUp} />
+
+        <Route path="/workspace/:workspace" component={Workspace} />
+        <Route path="/*" component={Login} />
       </Switch>
     </BrowserRouter>
   );
