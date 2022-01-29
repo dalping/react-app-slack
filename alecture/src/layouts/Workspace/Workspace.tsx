@@ -29,6 +29,8 @@ import { Input, Button, Label } from "./style";
 import CreateChannelModal from "../../components/CreateChannelModal/CreateChannelModal";
 import fetcher from "../../utils/fetcher";
 import InviteWorkspaceModal from "../../components/InviteWorkspaceModal/InviteWorkspaceModal";
+import ChannelList from "../../components/ChannelList/ChannelList";
+import DMList from "../../components/DMList/DMList";
 
 const Workspace: VFC = () => {
   const [newWorkspaceInput, setNewWorkspaceInput] = useState({
@@ -47,15 +49,16 @@ const Workspace: VFC = () => {
   const { workspace, channel } =
     useParams<{ workspace: string; channel: string }>();
 
+  // 유저 정보
   const {
     data: userData,
-    error,
     revalidate,
     mutate,
   } = useSWR<IUser | false>("http://localhost:3095/api/users", fecther, {
     dedupingInterval: 2000,
   });
 
+  // 해당 워크스페이스에 속하는 채널들 정보
   const { data: channelData } = useSWR<IChannel[]>(
     userData
       ? `http://localhost:3095/api/workspaces/${workspace}/channels`
@@ -63,23 +66,21 @@ const Workspace: VFC = () => {
     fetcher
   );
 
+  //현재 워크스페이스에 소속된 멤버 정보
+  const { mutate: memberData } = useSWR<IUser[]>(
+    userData ? `/api/workspaces/${workspace}/members` : null,
+    fetcher
+  );
+
+  //로그아웃
   const onLogout = useCallback(() => {
     axios
       .post("http://localhost:3095/api/users/logout", null, {
         withCredentials: true,
       })
       .then(() => {
-        //revalidate();
         mutate(false);
       });
-  }, []);
-
-  const onClickUserProfile = useCallback(() => {
-    setShowUserMenu(!showUserMenu);
-  }, [showUserMenu]);
-
-  const onClickAddChannnel = useCallback(() => {
-    setShowCreateChannelModal((prev) => !prev);
   }, []);
 
   const onCreateWorkspace = useCallback(
@@ -115,10 +116,6 @@ const Workspace: VFC = () => {
     [newName, newUrl]
   );
 
-  const onClickCreateWorkspace = useCallback(() => {
-    setShowCreateWorkspaceModal(!showCreateWorkspaceModal);
-  }, [showCreateWorkspaceModal]);
-
   const onChange = useCallback(
     (e) => {
       const { value, name } = e.target;
@@ -137,6 +134,18 @@ const Workspace: VFC = () => {
   const toggleWorkspaceModal = useCallback(() => {
     setshowWorkspaceModal((prev) => !prev);
   }, []);
+
+  const onClickUserProfile = useCallback(() => {
+    setShowUserMenu(!showUserMenu);
+  }, [showUserMenu]);
+
+  const onClickAddChannnel = useCallback(() => {
+    setShowCreateChannelModal((prev) => !prev);
+  }, []);
+
+  const onClickCreateWorkspace = useCallback(() => {
+    setShowCreateWorkspaceModal(!showCreateWorkspaceModal);
+  }, [showCreateWorkspaceModal]);
 
   const onClickInviteWorkspace = useCallback(() => {
     setShowInviteWorkspaceModal((prev) => !prev);
@@ -205,7 +214,7 @@ const Workspace: VFC = () => {
             <Menu
               show={showWorkspaceModal}
               onCloseModal={toggleWorkspaceModal}
-              style={{ top: 120, left: 80 }}
+              style={{ top: 110, left: 70 }}
             >
               <WorkspaceModal>
                 <h2>채널 만들기</h2>
@@ -216,9 +225,11 @@ const Workspace: VFC = () => {
                 <button onClick={onLogout}>로그아웃</button>
               </WorkspaceModal>
             </Menu>
-            {channelData?.map((v, idx) => (
+            {/* {channelData?.map((v, idx) => (
               <div key={idx}>{v.name}</div>
-            ))}
+            ))} */}
+            <ChannelList />
+            <DMList />
           </MenuScroll>
         </Channels>
         <Chats>
