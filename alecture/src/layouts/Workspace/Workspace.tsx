@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useCallback, useState, VFC } from "react";
+import React, { useCallback, useState, VFC, useEffect } from "react";
 import { Redirect, Switch, Route, Link, useParams } from "react-router-dom";
 import useSWR, { mutate } from "swr";
 import fecther from "../../utils/fetcher";
@@ -31,6 +31,7 @@ import fetcher from "../../utils/fetcher";
 import InviteWorkspaceModal from "../../components/InviteWorkspaceModal/InviteWorkspaceModal";
 import ChannelList from "../../components/ChannelList/ChannelList";
 import DMList from "../../components/DMList/DMList";
+import useSocket from "../../hooks/useSocket";
 
 const Workspace: VFC = () => {
   const [newWorkspaceInput, setNewWorkspaceInput] = useState({
@@ -72,6 +73,13 @@ const Workspace: VFC = () => {
     fetcher
   );
 
+  const [socket, disconnect] = useSocket(workspace);
+
+  useEffect(() => {
+    socket.on("message");
+    socket.emit();
+    disconnect();
+  }, []);
   //로그아웃
   const onLogout = useCallback(() => {
     axios

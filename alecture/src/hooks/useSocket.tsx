@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 
 const sockets = {};
 const backUrl = `http://localhost:3095`;
-const useSocket = (workspace?: string) => {
+const useSocket = (workspace: string) => {
   if (!workspace) return;
   sockets[workspace] = io.connect(`${backUrl}/ws-${workspace}`);
   //   const socket = io.connect(`${backUrl}`);
@@ -13,6 +13,15 @@ const useSocket = (workspace?: string) => {
   sockets[workspace].on("message", (data: any) => {
     console.log(data);
   });
+  sockets[workspace].on("data", (data: any) => {
+    console.log(data);
+  });
+  sockets[workspace].on("onlineList", (data: any) => {
+    console.log(data);
+  });
+  const disconnect = sockets[workspace].disconnect;
+
+  return;
 };
 
 export default useSocket;
