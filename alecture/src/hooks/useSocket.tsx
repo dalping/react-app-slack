@@ -5,7 +5,9 @@ import React, { useCallback } from "react";
 const sockets: { [key: string]: SocketIOClient.Socket } = {};
 const backUrl = `http://localhost:3095`;
 
-const useSocket = (workspace: string) => {
+const useSocket = (
+  workspace: string
+): [SocketIOClient.Socket | undefined, () => void] => {
   const disconnect = useCallback(() => {
     sockets[workspace].disconnect;
     delete sockets[workspace];
