@@ -87,11 +87,12 @@ const Workspace: VFC = () => {
     // disconnect();
   }, [socket, channelData, userData]);
 
+  //워크스페이스가 바뀌면 기존 워크스페이스의 연결을 끊음
   useEffect(() => {
     return () => {
       disconnect();
     };
-  }, [workspace]);
+  }, [workspace, disconnect]);
 
   //로그아웃
   const onLogout = useCallback(() => {
