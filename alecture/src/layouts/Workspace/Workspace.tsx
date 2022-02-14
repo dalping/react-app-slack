@@ -77,6 +77,7 @@ const Workspace: VFC = () => {
 
   useEffect(() => {
     if (channelData && userData && socket) {
+      console.log(socket);
       socket.emit("login", {
         id: userData.id,
         channels: channelData.map((v) => v.id),

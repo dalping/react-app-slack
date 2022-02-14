@@ -16,9 +16,13 @@ const useSocket = (
   }, [workspace]);
 
   if (!workspace) return [undefined, disconnect];
-  sockets[workspace] = io.connect(`${backUrl}/ws-${workspace}`, {
-    transports: ["websocket"], //http연결을 요청(polling) 하지않고 바로 웹소켓만 하용하도록 명시
-  });
+
+  // 기존에 없었으면 먄들기
+  if (!sockets[workspace]) {
+    sockets[workspace] = io.connect(`${backUrl}/ws-${workspace}`, {
+      transports: ["websocket"], //http연결을 요청(polling) 하지않고 바로 웹소켓만 하용하도록 명시
+    });
+  }
 
   //   const socket = io.connect(`${backUrl}`);
   //보내기
@@ -34,6 +38,7 @@ const useSocket = (
   //     console.log(data);
   //   });
 
+  //기존에 있던 것 리턴
   return [sockets[workspace], disconnect];
 };
 
